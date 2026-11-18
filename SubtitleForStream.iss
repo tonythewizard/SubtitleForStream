@@ -1,7 +1,7 @@
 ; Inno Setup installer for SubtitleForStream.
 #define MyAppName "SubtitleForStream"
 #ifndef MyAppVersion
-#define MyAppVersion "0.2.0"
+#define MyAppVersion "0.1.0"
 #endif
 #define MyAppExeName "SubtitleForStream.exe"
 [Setup]
@@ -16,6 +16,7 @@ OutputDir=installer
 OutputBaseFilename=SubtitleForStream-Setup-{#MyAppVersion}-x64
 SetupIconFile=assets\SubtitleForStream.ico
 VersionInfoVersion={#MyAppVersion}
+LicenseFile=LICENSE
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern

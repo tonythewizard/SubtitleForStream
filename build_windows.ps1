@@ -23,6 +23,7 @@ $pack = @('--noconfirm','--clean','--onedir','--windowed',
           '--add-data','app/censor_presets;app/censor_presets',
           '--add-data','app/ui_strings.txt;app',
           '--add-data','VERSION;.',
+          '--add-data','LICENSE;.',
           '--add-data','UPDATE_REPOSITORY;.',
           'launch.py')
 & $python -c 'import llama_cpp'

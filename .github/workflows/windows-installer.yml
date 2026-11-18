@@ -1,0 +1,111 @@
+name: Windows installer
+
+on:
+  pull_request:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-installer-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12.10'
+          architecture: x64
+      - name: Validate release version
+        shell: pwsh
+        run: |
+          $version = (Get-Content VERSION -Raw).Trim()
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "Invalid VERSION: $version" }
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -cne "v$version") {
+              throw "Tag $env:GITHUB_REF_NAME does not match VERSION $version"
+          }
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          python -m venv .venv
+          $python = '.\.venv\Scripts\python.exe'
+          & $python -m pip install --only-binary=:all: -r requirements.txt pytest pyinstaller==6.22.3
+          try {
+              & $python -m pip install --only-binary=:all: llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+          } catch {
+              Write-Warning 'Optional Qwen runtime was not available on the runner.'
+          }
+      - name: Run tests
+        shell: pwsh
+        env:
+          HF_HUB_OFFLINE: '1'
+        run: .\.venv\Scripts\python.exe -m pytest -q
+      - name: Build app and installer
+        shell: powershell
+        run: |
+          .\build_windows.ps1
+          .\build_installer.ps1
+      - name: Smoke-test the installer
+        shell: pwsh
+        run: .\tools\smoke_installer.ps1
+      - name: Write checksum and dependency inventory
+        shell: pwsh
+        run: |
+          $version = (Get-Content VERSION -Raw).Trim()
+          $name = "SubtitleForStream-Setup-$version-x64.exe"
+          $checksum = (Get-FileHash -Algorithm SHA256 "installer/$name").Hash.ToLowerInvariant()
+          "$checksum  $name" | Set-Content -LiteralPath "installer/$name.sha256" -Encoding ascii
+          .\.venv\Scripts\python.exe -m pip freeze | Set-Content -LiteralPath 'installer/build-dependencies.txt' -Encoding utf8
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-installer-x64
+          path: |
+            installer/SubtitleForStream-Setup-*-x64.exe
+            installer/SubtitleForStream-Setup-*-x64.exe.sha256
+            installer/build-dependencies.txt
+          if-no-files-found: error
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: windows-installer-diagnostics
+          path: installer/smoke-install.log
+          if-no-files-found: ignore
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: windows-installer-x64
+          path: release-assets
+      - name: Verify and publish release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(tr -d '\r\n' < VERSION)
+          name="SubtitleForStream-Setup-${version}-x64.exe"
+          (cd release-assets && sha256sum --check "$name.sha256")
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" \
+            --verify-tag --title "SubtitleForStream $GITHUB_REF_NAME" \
+            --notes-file "docs/releases/$GITHUB_REF_NAME.md" --latest \
+            "release-assets/$name" "release-assets/$name.sha256" "release-assets/build-dependencies.txt"

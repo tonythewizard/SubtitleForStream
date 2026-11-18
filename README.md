@@ -17,7 +17,7 @@
 
 **Target platform:** Windows 11 x64. OBS Studio is needed for the on-stream overlay, but you can test the caption monitor without OBS. Internet access is needed to get missing models and check for updates. A model already on disk can be loaded offline.
 
-When an installer is published, download `SubtitleForStream-Setup-<version>-x64.exe` from [GitHub Releases](https://github.com/tonythewizard/SubtitleForStream/releases). The setup installs the app for the current Windows user and creates a Start menu entry. The Desktop shortcut is selected by default. **The existing 0.2.0 installer is an internal test build. No public installer has been published yet.** You can run the source with the steps in [Build and test](#build-and-test).
+Download `SubtitleForStream-Setup-<version>-x64.exe` from [GitHub Releases](https://github.com/tonythewizard/SubtitleForStream/releases). The setup installs the app for the current Windows user and creates a Start menu entry. The Desktop shortcut is selected by default. **v0.1.0 is the first public release.** Earlier local `0.2.0` test installers were internal builds. The updater does not offer a downgrade from them. You can also run the source with the steps in [Build and test](#build-and-test).
 
 1. Open SubtitleForStream. Auto-start is enabled by default. The app shows when Whisper is preparing, downloading, or repairing the model. Audio capture starts once the model is ready.
 2. Open **Sources**, select your microphone and enable the inputs you want to caption. Use **Add microphone** or **Add Windows app** for additional inputs.
@@ -123,7 +123,7 @@ Use `-Check` to verify prerequisites or `-GpuIndex <index>` to select a device. 
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Tests cover filtering, caption state, local overlay HTTP, model caching and recovery, backend selection, and update verification. Hardware and clean-machine checks are separate. For release preparation, use `VERSION` for the app and installer, a stable tag such as `v0.2.1`, and the exact setup asset name `SubtitleForStream-Setup-0.2.1-x64.exe`. The default feed is set in `UPDATE_REPOSITORY`. Review third-party redistribution terms before publishing any installer, runtime, or model bundle.
+Tests cover filtering, caption state, local overlay HTTP, model caching and recovery, backend selection, and update verification. Hardware and clean-machine checks are separate. The [Windows installer workflow](.github/workflows/windows-installer.yml) tests and builds on GitHub-hosted Windows. It publishes stable version tags with the installer, SHA-256 checksum, and build dependency inventory. The tag must match `VERSION`, and its release notes must be present under `docs/releases/`. The default update feed is set in `UPDATE_REPOSITORY`. Review third-party redistribution terms before publishing additional runtimes or model bundles.
 
 ## Privacy and license
 
