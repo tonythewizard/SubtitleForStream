@@ -1,0 +1,24 @@
+/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+/build/
+/dist/
+/installer/
+/*.spec
+/*.log
+/assets/streamcaptions.ico
+/assets/subtitlefortwitch.ico
+/assets/SubtitleForStream.ico
+/Icon SFT_ sottotitoli live in viola neon.png
+/whisper-vulkan/
+/whisper-vulkan-build/
+/vk-build/
+/vulkan-sdk-installer.exe
+/bundled_models/
+/app_current.png
+/app_fixed.png
+/app_main_current.png
+/ui_*_preview.png
+/config.json
+.env

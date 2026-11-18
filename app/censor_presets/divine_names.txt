@@ -1,0 +1,181 @@
+# Nomi, titoli e traduzioni comuni, applicati in tutti i preset.
+God
+the Lord
+Almighty
+Lord God
+Jesus
+Jesus Christ
+Dio
+Iddio
+Dio Padre
+Signore
+Onnipotente
+Gesù
+Gesù Cristo
+Cristo
+Madonna
+Spirito Santo
+Dieu
+Jésus
+Jésus-Christ
+Seigneur
+Saint-Esprit
+Dios
+Jesús
+Jesucristo
+Señor
+Espíritu Santo
+Deus
+Senhor
+Espírito Santo
+Gott
+Herrgott
+Jesus Christus
+Heiliger Geist
+Allah
+Allāh
+Alá
+الله
+اللَّه
+إله
+الرب
+يسوع
+المسيح
+خدا
+خالق
+پروردگار
+Rab
+Rabb
+Rahman
+Ar-Rahman
+Ar-Rahim
+Bismillah
+Adonai
+Adonay
+Elohim
+Eloah
+El Shaddai
+Yahweh
+Yahveh
+Yahvé
+YHWH
+Jahveh
+Yah
+Jah
+Jehovah
+Jéhovah
+Geova
+Hashem
+יהוה
+אדוני
+אלוהים
+ישוע
+Θεός
+Κύριος
+Ιησούς
+Христос
+Бог
+Господь
+Иисус
+Боже
+Святий Дух
+Боженька
+Bóg
+Boh
+Bůh
+Isten
+Dumnezeu
+Isus
+Hristos
+Gud
+Jumala
+Jumal
+Godt
+Gottheit
+Tanrı
+Tanri
+İsa
+Tuhan
+Yang Maha Esa
+Yesus
+Panginoon
+Diyos
+Diyos Ama
+Hesus
+Chúa
+Thượng Đế
+Thiên Chúa
+Đức Chúa Trời
+上帝
+天主
+真主
+耶稣
+耶穌
+神様
+イエス
+キリスト
+하나님
+하느님
+예수
+그리스도
+พระเจ้า
+พระเยซู
+भगवान
+ईश्वर
+परमेश्वर
+यीशु
+अल्लाह
+ब्रह्म
+ईश
+ভগবান
+ঈশ্বর
+আল্লাহ
+যিশু
+கடவுள்
+இறைவன்
+இயேசு
+దేవుడు
+యేసు
+Waheguru
+ਵਾਹਿਗੁਰੂ
+Akāl Purakh
+Bhagavan
+Bhagwan
+Ishvara
+Parameshvara
+Brahman
+Brahma
+Vishnu
+Shiva
+Krishna
+Rama
+Mahadeva
+Ahura Mazda
+Ormuzd
+Waaq
+Mungu
+Mola
+Yesu
+Nkulunkulu
+uThixo
+Nyame
+Onyankopon
+Olodumare
+Ọlọ́run
+Olórun
+Chukwu
+Chineke
+Wakan Tanka
+Gitche Manitou
+Tengri
+Bayanay
+Zeus
+Júpiter
+Jupiter
+Odin
+Odino
+Thor
+Ra
+Amon-Ra
+Quetzalcóatl
+Viracocha

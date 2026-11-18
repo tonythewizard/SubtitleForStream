@@ -1,0 +1,151 @@
+# key|it|en|es|fr|de
+subtitle|Sottotitoli locali per streaming e OBS|Local captions for streaming and OBS|Subtítulos locales para directos y OBS|Sous-titres locaux pour le streaming et OBS|Lokale Untertitel für Streaming und OBS
+idle|In pausa|Paused|En pausa|En pause|Pausiert
+active|In trascrizione|Transcribing|Transcribiendo|Transcription en cours|Transkription läuft
+start|Avvia trascrizione|Start transcription|Iniciar transcripción|Démarrer la transcription|Transkription starten
+stop|Ferma trascrizione|Stop transcription|Detener transcripción|Arrêter la transcription|Transkription stoppen
+clear|Pulisci overlay|Clear overlay|Limpiar superposición|Effacer la superposition|Overlay leeren
+ready|Pronto. Avvia per catturare le sorgenti abilitate.|Ready. Start to capture enabled sources.|Listo. Inicia la captura de las fuentes activas.|Prêt. Lancez la capture des sources actives.|Bereit. Starte die Aufnahme der aktiven Quellen.
+started|Cattura avviata. In attesa delle voci…|Capture started. Listening for speech…|Captura iniciada. Escuchando voces…|Capture démarrée. En attente de voix…|Aufnahme gestartet. Warte auf Sprache…
+stopped|Trascrizione fermata. Overlay ancora disponibile.|Transcription stopped. Overlay still available.|Transcripción detenida. La superposición sigue disponible.|Transcription arrêtée. La superposition reste disponible.|Transkription gestoppt. Overlay weiterhin verfügbar.
+initialized|L’app è pronta.|The app is ready.|La aplicación está lista.|L’application est prête.|Die App ist bereit.
+port_error|Impossibile avviare l’overlay: {error}|Could not start the overlay: {error}|No se pudo iniciar la superposición: {error}|Impossible de démarrer la superposition : {error}|Overlay konnte nicht gestartet werden: {error}
+open_app|Apri SubtitleForStream|Open SubtitleForStream|Abrir SubtitleForStream|Ouvrir SubtitleForStream|SubtitleForStream öffnen
+open_overlay|Apri overlay nel browser|Open overlay in browser|Abrir superposición en el navegador|Ouvrir la superposition dans le navigateur|Overlay im Browser öffnen
+copy_overlay|Copia URL overlay|Copy overlay URL|Copiar URL de la superposición|Copier l’URL de la superposition|Overlay-URL kopieren
+open_logs|Apri diagnostica|Open diagnostics|Abrir diagnóstico|Ouvrir le diagnostic|Diagnose öffnen
+hide|Nascondi nella tray|Hide to system tray|Ocultar en la bandeja|Masquer dans la zone de notification|In den Infobereich ausblenden
+close_to_tray|Riduci nella tray alla chiusura|Hide to tray when closing|Ocultar en la bandeja al cerrar|Masquer dans la zone de notification à la fermeture|Beim Schließen im Infobereich ausblenden
+exit|Esci da SubtitleForStream|Quit SubtitleForStream|Salir de SubtitleForStream|Quitter SubtitleForStream|SubtitleForStream beenden
+monitor|Monitor sottotitoli|Caption monitor|Monitor de subtítulos|Aperçu des sous-titres|Untertitelmonitor
+monitor_idle|Avvia la trascrizione per vedere qui i sottotitoli.|Start transcription to see captions here.|Inicia la transcripción para ver aquí los subtítulos.|Démarrez la transcription pour voir les sous-titres ici.|Starte die Transkription, um hier Untertitel zu sehen.
+monitor_active|In ascolto delle sorgenti attive…|Listening to active sources…|Escuchando las fuentes activas…|Écoute des sources actives…|Aktive Quellen werden abgehört…
+sources|Sorgenti|Sources|Fuentes|Sources|Quellen
+audio_sources|Sorgenti audio|Audio sources|Fuentes de audio|Sources audio|Audioquellen
+add_mic|Aggiungi microfono|Add microphone|Añadir micrófono|Ajouter un microphone|Mikrofon hinzufügen
+add_app|Aggiungi applicazione Windows|Add Windows app|Añadir aplicación de Windows|Ajouter une application Windows|Windows-App hinzufügen
+refresh|Aggiorna|Refresh|Actualizar|Actualiser|Aktualisieren
+source_hint|Per trascrivere un’altra app, aggiungila come sorgente audio.|To transcribe another app, add it as an audio source.|Para transcribir otra aplicación, añádela como fuente de audio.|Pour transcrire une autre application, ajoutez-la comme source audio.|Füge eine weitere App als Audioquelle hinzu, um sie zu transkribieren.
+default_mic|Microfono predefinito|Default microphone|Micrófono predeterminado|Microphone par défaut|Standardmikrofon
+missing_mic|Microfono non disponibile [{device}]|Microphone unavailable [{device}]|Micrófono no disponible [{device}]|Microphone indisponible [{device}]|Mikrofon nicht verfügbar [{device}]
+process|Processo: {name}|Process: {name}|Proceso: {name}|Processus : {name}|Prozess: {name}
+rename|Rinomina|Rename|Renombrar|Renommer|Umbenennen
+color|Colore|Colour|Color|Couleur|Farbe
+remove|Rimuovi|Remove|Quitar|Retirer|Entfernen
+assigned_mic|Microfono già assegnato|Microphone already assigned|Micrófono ya asignado|Microphone déjà attribué|Mikrofon bereits zugewiesen
+different_mic|Scegli un microfono diverso per questa sorgente.|Choose a different microphone for this source.|Elige otro micrófono para esta fuente.|Choisissez un autre microphone pour cette source.|Wähle ein anderes Mikrofon für diese Quelle.
+no_mic|Nessun microfono libero|No available microphone|No hay micrófonos libres|Aucun microphone disponible|Kein freies Mikrofon
+no_mic_hint|Collega un altro microfono oppure rimuovi una sorgente già assegnata.|Connect another microphone or remove an existing source.|Conecta otro micrófono o elimina una fuente existente.|Connectez un autre microphone ou retirez une source existante.|Schließe ein weiteres Mikrofon an oder entferne eine bestehende Quelle.
+input_device|Dispositivo di ingresso:|Input device:|Dispositivo de entrada:|Périphérique d’entrée :|Eingabegerät:
+rename_source|Rinomina sorgente|Rename source|Renombrar fuente|Renommer la source|Quelle umbenennen
+caption_name|Nome nei sottotitoli:|Name in captions:|Nombre en los subtítulos:|Nom dans les sous-titres :|Name in Untertiteln:
+process_name|Nome processo (esempio: Discord.exe)|Process name (e.g. Discord.exe)|Nombre del proceso (p. ej. Discord.exe)|Nom du processus (ex. Discord.exe)|Prozessname (z. B. Discord.exe)
+choose_process|Processo da trascrivere:|Process to transcribe:|Proceso que se va a transcribir:|Processus à transcrire :|Zu transkribierender Prozess:
+already_added|Già presente|Already added|Ya añadida|Déjà ajoutée|Bereits hinzugefügt
+already_added_hint|Questa applicazione è già nella lista.|This app is already in the list.|Esta aplicación ya está en la lista.|Cette application figure déjà dans la liste.|Diese App steht bereits in der Liste.
+transcription|Trascrizione|Transcription|Transcripción|Transcription|Transkription
+offline_engine|Motore di trascrizione locale|Local transcription engine|Motor de transcripción local|Moteur de transcription local|Lokale Transkriptions-Engine
+whisper_only|Solo Whisper (più veloce)|Whisper only (faster)|Solo Whisper (más rápido)|Whisper seul (plus rapide)|Nur Whisper (schneller)
+both|Whisper e revisione Qwen|Whisper with Qwen proofreading|Whisper con revisión de Qwen|Whisper avec révision Qwen|Whisper mit Qwen-Korrektur
+qwen|Qwen revisore (richiede Whisper)|Qwen proofreading (requires Whisper)|Revisión con Qwen (requiere Whisper)|Révision Qwen (nécessite Whisper)|Qwen-Korrektur (benötigt Whisper)
+ai_mode|Modalità AI|AI mode|Modo de IA|Mode d’IA|KI-Modus
+model|Modello Whisper|Whisper model|Modelo Whisper|Modèle Whisper|Whisper-Modell
+cpu|CPU INT8 (senza GPU)|CPU INT8 (no GPU)|CPU INT8 (sin GPU)|CPU INT8 (sans GPU)|CPU INT8 (ohne GPU)
+compute|Calcolo Whisper|Whisper compute device|Dispositivo de cálculo de Whisper|Périphérique de calcul Whisper|Whisper-Rechengerät
+backend_auto|Automatico (base CPU)|Automatic (CPU baseline)|Automático (base CPU)|Automatique (CPU par défaut)|Automatisch (CPU-Basis)
+backend_effective|Motore effettivo|Active backend|Motor activo|Moteur actif|Aktives Backend
+backend_stopped|Trascrizione ferma|Transcription stopped|Transcripción detenida|Transcription arrêtée|Transkription gestoppt
+backend_waiting|In preparazione…|Preparing…|Preparando…|Préparation…|Wird vorbereitet…
+backend_loaded|{device} · Whisper {model}|{device} · Whisper {model}|{device} · Whisper {model}|{device} · Whisper {model}|{device} · Whisper {model}
+backend_fallback|{device} · Whisper {model}. GPU non disponibile, controlla OBS e log.|{device} · Whisper {model}. GPU unavailable. See OBS & logs.|{device} · Whisper {model}. GPU no disponible. Consulta OBS y registros.|{device} · Whisper {model}. GPU indisponible. Consultez OBS et journaux.|{device} · Whisper {model}. GPU nicht verfügbar. Siehe OBS und Protokoll.
+backend_not_listed|{device} (dispositivo non rilevato)|{device} (device not detected)|{device} (dispositivo no detectado)|{device} (périphérique non détecté)|{device} (Gerät nicht erkannt)
+live|Modalità live (anteprima ogni ~500 ms)|Live mode (preview roughly every 500 ms)|Modo directo (vista previa cada ~500 ms)|Mode direct (aperçu toutes les ~500 ms)|Live-Modus (Vorschau etwa alle 500 ms)
+vad|Rilevamento vocale (VAD)|Voice activity detection (VAD)|Detección de voz (VAD)|Détection de la voix (VAD)|Sprachaktivitätserkennung (VAD)
+hallucinations|Rimuovi crediti e allucinazioni note|Remove known credits and hallucinations|Eliminar créditos y alucinaciones conocidas|Supprimer les crédits et hallucinations connus|Bekannte Credits und Halluzinationen entfernen
+original|Automatico · lingua originale|Automatic · original language|Automático · idioma original|Automatique · langue originale|Automatisch · Originalsprache
+speech_language|Lingua trascrizione|Transcription language|Idioma de transcripción|Langue de transcription|Transkriptionssprache
+speech_hint|In automatico Whisper rileva la lingua parlata. La scelta manuale indica la lingua da riconoscere.|In automatic mode, Whisper detects the spoken language. Select a language to tell Whisper what to expect.|En modo automático, Whisper detecta el idioma hablado. Elige un idioma para indicarle qué debe reconocer.|En mode automatique, Whisper détecte la langue parlée. Sélectionnez une langue pour indiquer laquelle reconnaître.|Im Automatikmodus erkennt Whisper die gesprochene Sprache. Wähle eine Sprache, um sie direkt vorzugeben.
+threshold|Soglia di attivazione|Activation threshold|Umbral de activación|Seuil de déclenchement|Aktivierungsschwelle
+engine_hint|Whisper si carica all’avvio. CUDA richiede librerie NVIDIA compatibili. Per applicare le modifiche alla cattura, ferma e riavvia la trascrizione.|Whisper loads when you start. CUDA requires compatible NVIDIA libraries. Stop and restart transcription to apply capture changes.|Whisper se carga al iniciar. CUDA requiere bibliotecas NVIDIA compatibles. Detén y reinicia la transcripción para aplicar cambios de captura.|Whisper se charge au démarrage. CUDA nécessite des bibliothèques NVIDIA compatibles. Arrêtez puis relancez la transcription pour appliquer les réglages de capture.|Whisper lädt beim Start. CUDA benötigt kompatible NVIDIA-Bibliotheken. Starte die Transkription neu, um Aufnahmeänderungen zu übernehmen.
+filters|Filtri prima dell’overlay|Overlay filters|Filtros de superposición|Filtres de superposition|Overlay-Filter
+censor|Censura automatica delle parole|Automatic word censoring|Censura automática de palabras|Censure automatique des mots|Automatischer Wortfilter
+punctuation|Punteggiatura e maiuscole automatiche|Automatic punctuation and capitalization|Puntuación y mayúsculas automáticas|Ponctuation et majuscules automatiques|Automatische Zeichensetzung und Großschreibung
+effects|Effetti adattivi in base alla frase|Adaptive effects based on the phrase|Efectos adaptativos según la frase|Effets adaptatifs selon la phrase|Anpassbare Effekte je nach Satz
+censor_mode|Tipo di censura|Censorship mode|Modo de censura|Mode de censure|Filtermodus
+mask|Oscura con asterischi|Mask with asterisks|Ocultar con asteriscos|Masquer avec des astérisques|Mit Sternchen maskieren
+soft|Ammorbidisci|Soften wording|Suavizar términos|Adoucir le vocabulaire|Ausdrücke abschwächen
+replace|Sostituisci con un’etichetta|Replace with a label|Sustituir por una etiqueta|Remplacer par une étiquette|Durch einen Hinweis ersetzen
+off|Non censurare|No censoring|Sin censura|Sans censure|Keine Zensur
+preset|Preset attivo|Active preset|Preajuste activo|Préréglage actif|Aktive Voreinstellung
+show_list|Mostra elenco|Show list|Mostrar lista|Afficher la liste|Liste anzeigen
+preset_title|Preset censura · {language}|Censorship preset · {language}|Preajuste de censura · {language}|Préréglage de censure · {language}|Filtervoreinstellung · {language}
+all_languages|Tutte le lingue supportate|All supported languages|Todos los idiomas compatibles|Toutes les langues prises en charge|Alle unterstützten Sprachen
+close|Chiudi|Close|Cerrar|Fermer|Schließen
+custom_words|Parole da oscurare|Words to mask|Palabras que ocultar|Mots à masquer|Zu maskierende Wörter
+custom_hint|Aggiungi parole o frasi, separate da virgole|Add words or phrases, separated by commas|Añade palabras o frases separadas por comas|Ajoutez des mots ou expressions séparés par des virgules|Wörter oder Ausdrücke durch Kommas getrennt hinzufügen
+exceptions|Eccezioni del preset|Preset exceptions|Excepciones del preajuste|Exceptions du préréglage|Ausnahmen der Voreinstellung
+exceptions_placeholder|Escludi voci del preset, separate da virgole|Exclude preset entries, separated by commas|Excluye entradas del preajuste separadas por comas|Excluez les entrées du préréglage, séparées par des virgules|Einträge durch Kommas getrennt ausschließen
+exceptions_hint|Le eccezioni corrispondono a voci esatte. Parole e frasi sono voci distinte.|Exceptions match exact entries. Words and phrases are separate entries.|Las excepciones coinciden con entradas exactas. Las palabras y frases son entradas distintas.|Les exceptions correspondent aux entrées exactes. Les mots et expressions sont des entrées distinctes.|Ausnahmen gelten für exakte Einträge. Wörter und Ausdrücke sind getrennte Einträge.
+qwen_hint|Qwen può rivedere il testo dopo la prima visualizzazione. Il modello opzionale occupa circa 0,5 GB.|Qwen can review text after it first appears. The optional model takes about 0.5 GB.|Qwen puede revisar el texto después de mostrarlo. El modelo opcional ocupa unos 0,5 GB.|Qwen peut réviser le texte après son premier affichage. Le modèle facultatif occupe environ 0,5 Go.|Qwen kann den Text nach der ersten Anzeige überarbeiten. Das optionale Modell benötigt etwa 0,5 GB.
+test_filters|Prova filtri senza microfono|Test filters without a microphone|Probar filtros sin micrófono|Tester les filtres sans microphone|Filter ohne Mikrofon testen
+preview_filters|Esegui anteprima SmartText|Preview SmartText|Vista previa de SmartText|Aperçu SmartText|SmartText-Vorschau
+sample|Ragazzi, attenti dietro!|Watch out behind you!|¡Cuidado detrás de ti!|Attention derrière toi !|Pass auf, hinter dir!
+styles|Stili|Styles|Estilos|Styles|Stile
+style_editor|Editor grafico live|Live style editor|Editor de estilo en directo|Éditeur de style en direct|Live-Stileditor
+style|Stile|Style|Estilo|Style|Stil
+font|Font Windows|Windows font|Fuente de Windows|Police Windows|Windows-Schrift
+size|Dimensione|Size|Tamaño|Taille|Größe
+opacity|Opacità sfondo|Background opacity|Opacidad del fondo|Opacité du fond|Hintergrunddeckkraft
+outline|Contorno|Outline|Contorno|Contour|Kontur
+duration|Durata|Duration|Duración|Durée|Dauer
+bottom|Distanza dal basso|Bottom offset|Distancia desde abajo|Distance depuis le bas|Abstand von unten
+voices|Voci simultanee|Simultaneous voices|Voces simultáneas|Voix simultanées|Gleichzeitige Stimmen
+text_color|Colore testo|Text colour|Color del texto|Couleur du texte|Textfarbe
+background|Sfondo|Background|Fondo|Fond|Hintergrund
+transparent|Sfondo trasparente|Transparent background|Fondo transparente|Fond transparent|Transparenter Hintergrund
+overlay_preview|Anteprima overlay|Overlay preview|Vista previa de la superposición|Aperçu de la superposition|Overlay-Vorschau
+obs_logs|OBS e log|OBS and logs|OBS y registros|OBS et journaux|OBS und Protokoll
+overlay_title|Overlay OBS locale|Local OBS overlay|Superposición OBS local|Superposition OBS locale|Lokales OBS-Overlay
+browser_source|Sorgente browser|Browser source|Fuente de navegador|Source navigateur|Browserquelle
+obs_hint|Imposta la sorgente browser di OBS su 1920 × 1080 e usa questo URL.|Set the OBS browser source to 1920 × 1080 and use this URL.|Configura la fuente de navegador de OBS a 1920 × 1080 y usa esta URL.|Réglez la source navigateur OBS sur 1920 × 1080 et utilisez cette URL.|Stelle die OBS-Browserquelle auf 1920 × 1080 ein und nutze diese URL.
+websocket|Collega OBS via WebSocket|Connect OBS via WebSocket|Conectar OBS por WebSocket|Connecter OBS via WebSocket|OBS über WebSocket verbinden
+obs_password|Password WebSocket OBS (non salvata)|OBS WebSocket password (not saved)|Contraseña WebSocket de OBS (no se guarda)|Mot de passe WebSocket OBS (non enregistré)|OBS-WebSocket-Passwort (wird nicht gespeichert)
+obs_install|Installa overlay nella scena OBS attiva|Add overlay to the active OBS scene|Añadir superposición a la escena activa de OBS|Ajouter la superposition à la scène OBS active|Overlay zur aktiven OBS-Szene hinzufügen
+obs_websocket_hint|In OBS apri Strumenti → Impostazioni server WebSocket e attiva il server locale.|In OBS, open Tools → WebSocket Server Settings and enable the local server.|En OBS, abre Herramientas → Ajustes del servidor WebSocket y activa el servidor local.|Dans OBS, ouvrez Outils → Paramètres du serveur WebSocket et activez le serveur local.|Öffne in OBS Werkzeuge → WebSocket-Server-Einstellungen und aktiviere den lokalen Server.
+diagnostics|Diagnostica|Diagnostics|Diagnóstico|Diagnostic|Diagnose
+obs_connected|OBS collegato|OBS connected|OBS conectado|OBS connecté|OBS verbunden
+obs_created|Overlay creato nella scena «{scene}».|Overlay created in the “{scene}” scene.|Superposición creada en la escena «{scene}».|Superposition créée dans la scène « {scene} ».|Overlay in Szene „{scene}“ erstellt.
+obs_updated|L’URL dell’overlay esistente è stata aggiornata.|The existing overlay URL has been updated.|Se ha actualizado la URL de la superposición existente.|L’URL de la superposition existante a été mise à jour.|Die vorhandene Overlay-URL wurde aktualisiert.
+obs_failed|Connessione OBS non riuscita|Could not connect to OBS|No se pudo conectar a OBS|Impossible de se connecter à OBS|Verbindung zu OBS fehlgeschlagen
+settings|Impostazioni|Settings|Ajustes|Paramètres|Einstellungen
+interface|Interfaccia|Interface|Interfaz|Interface|Oberfläche
+ui_language|Lingua dell’interfaccia|Interface language|Idioma de la interfaz|Langue de l’interface|Oberflächensprache
+system_language|Automatico · lingua di Windows|Automatic · Windows language|Automático · idioma de Windows|Automatique · langue de Windows|Automatisch · Windows-Sprache
+ui_language_hint|L’app si riavvia quando cambi questa lingua. La lingua della trascrizione resta invariata.|The app restarts when you change this language. The transcription language stays the same.|La aplicación se reinicia al cambiar este idioma. El idioma de transcripción no cambia.|L’application redémarre au changement de cette langue. La langue de transcription reste inchangée.|Die App startet bei einer Sprachänderung neu. Die Transkriptionssprache bleibt gleich.
+restarting|Riavvio nella lingua selezionata…|Restarting in the selected language…|Reiniciando en el idioma seleccionado…|Redémarrage dans la langue sélectionnée…|Neustart in der ausgewählten Sprache…
+restart_failed|Lingua salvata. Non è stato possibile riaprire l’app automaticamente. Aprila dal menu Start.|Language saved. The app could not reopen automatically. Open it from the Start menu.|Idioma guardado. La aplicación no pudo abrirse automáticamente. Ábrela desde el menú Inicio.|Langue enregistrée. L’application n’a pas pu se rouvrir automatiquement. Ouvrez-la depuis le menu Démarrer.|Sprache gespeichert. Die App konnte nicht automatisch neu starten. Öffne sie über das Startmenü.
+autostart|Avvia la trascrizione quando apro l’app|Start transcription when I open the app|Iniciar la transcripción al abrir la aplicación|Démarrer la transcription à l’ouverture de l’application|Transkription beim Öffnen der App starten
+loading|Preparazione|Getting ready|Preparando|Préparation|Vorbereitung
+loading_model|Preparazione di Whisper. La cattura parte appena il modello è pronto.|Preparing Whisper. Capture starts when the model is ready.|Preparando Whisper. La captura empieza cuando el modelo está listo.|Préparation de Whisper. La capture commence lorsque le modèle est prêt.|Whisper wird vorbereitet. Die Aufnahme beginnt, sobald das Modell bereit ist.
+downloading|Download modello|Downloading model|Descargando modelo|Téléchargement du modèle|Modelldownload
+download_model|Il modello Whisper non è ancora disponibile su questo PC. Lo scarichiamo ora: può volerci qualche minuto.|The Whisper model is not available on this PC yet. The download may take a few minutes.|El modelo Whisper aún no está disponible en este equipo. La descarga puede tardar unos minutos.|Le modèle Whisper n’est pas encore disponible sur ce PC. Le téléchargement peut prendre quelques minutes.|Das Whisper-Modell ist auf diesem PC noch nicht verfügbar. Der Download kann einige Minuten dauern.
+repair_model|Whisper ha rilevato un file del modello danneggiato. Scarichiamo di nuovo solo i file da ripristinare.|Whisper found a damaged model file. Only the files needed for repair will be downloaded again.|Whisper detectó un archivo del modelo dañado. Solo se volverán a descargar los archivos necesarios para repararlo.|Whisper a détecté un fichier de modèle endommagé. Seuls les fichiers à réparer seront téléchargés de nouveau.|Whisper hat eine beschädigte Modelldatei erkannt. Nur die benötigten Dateien werden erneut heruntergeladen.
+model_retry|Whisper non è ancora pronto. Controlla la connessione e i dettagli in OBS e log. L’app riproverà tra poco.|Whisper is not ready yet. Check your connection and the details in OBS & logs. The app will retry shortly.|Whisper todavía no está listo. Comprueba la conexión y los detalles en OBS y registros. La aplicación volverá a intentarlo en breve.|Whisper n’est pas encore prêt. Vérifiez la connexion et les détails dans OBS et journaux. L’application réessaiera sous peu.|Whisper ist noch nicht bereit. Prüfe die Verbindung und die Details unter OBS und Protokoll. Die App versucht es in Kürze erneut.
+no_sources|Whisper è pronto. Abilita una sorgente audio per iniziare.|Whisper is ready. Enable an audio source to begin.|Whisper está listo. Activa una fuente de audio para empezar.|Whisper est prêt. Activez une source audio pour commencer.|Whisper ist bereit. Aktiviere eine Audioquelle, um zu beginnen.
+updates|Aggiornamenti|Updates|Actualizaciones|Mises à jour|Updates
+repository|Repository GitHub|GitHub repository|Repositorio de GitHub|Dépôt GitHub|GitHub-Repository
+update_on_start|Controlla gli aggiornamenti all’avvio|Check for updates on startup|Buscar actualizaciones al iniciar|Rechercher les mises à jour au démarrage|Beim Start nach Updates suchen
+check_update|Controlla aggiornamenti|Check for updates|Buscar actualizaciones|Vérifier les mises à jour|Nach Updates suchen
+update_version|Versione installata: {version}|Installed version: {version}|Versión instalada: {version}|Version installée : {version}|Installierte Version: {version}
+update_repo_required|Inserisci il repository GitHub pubblico nel formato proprietario/repository.|Enter the public GitHub repository in owner/repo format.|Introduce el repositorio público de GitHub en formato propietario/repositorio.|Saisissez le dépôt GitHub public au format propriétaire/dépôt.|Gib das öffentliche GitHub-Repository im Format Besitzer/Repository ein.
+update_checking|Controllo delle release GitHub…|Checking GitHub releases…|Consultando las versiones de GitHub…|Vérification des versions GitHub…|GitHub-Releases werden geprüft…
+update_current|Hai già la versione più recente.|You already have the latest version.|Ya tienes la versión más reciente.|Vous disposez déjà de la dernière version.|Du hast bereits die neueste Version.
+no_public_release|Non ci sono ancora release pubbliche disponibili per questo repository.|No public releases are available for this repository yet.|Todavía no hay versiones públicas disponibles para este repositorio.|Aucune version publique n’est encore disponible pour ce dépôt.|Für dieses Repository sind noch keine öffentlichen Releases verfügbar.
+update_check_failed|Impossibile controllare gli aggiornamenti. Verifica il repository e la connessione.|Could not check for updates. Check the repository and your connection.|No se pudieron buscar actualizaciones. Comprueba el repositorio y la conexión.|Impossible de vérifier les mises à jour. Vérifiez le dépôt et la connexion.|Updates konnten nicht geprüft werden. Prüfe das Repository und die Verbindung.
+update_available|Aggiornamento disponibile|Update available|Actualización disponible|Mise à jour disponible|Update verfügbar
+update_question|È disponibile SubtitleForStream {version}. Vuoi scaricare e avviare l’installer? L’app si chiuderà prima dell’installazione.|SubtitleForStream {version} is available. Download and launch the installer? The app will close before installation.|SubtitleForStream {version} está disponible. ¿Descargar y ejecutar el instalador? La aplicación se cerrará antes de la instalación.|SubtitleForStream {version} est disponible. Télécharger et lancer le programme d’installation ? L’application se fermera avant l’installation.|SubtitleForStream {version} ist verfügbar. Installer herunterladen und starten? Die App wird vor der Installation geschlossen.
+update_page_question|È disponibile SubtitleForStream {version}, ma non c’è un installer verificabile. Vuoi aprire la release su GitHub?|SubtitleForStream {version} is available, but there is no verifiable installer. Open the release on GitHub?|SubtitleForStream {version} está disponible, pero no hay un instalador verificable. ¿Abrir la versión en GitHub?|SubtitleForStream {version} est disponible, mais aucun installateur ne peut être vérifié. Ouvrir la version sur GitHub ?|SubtitleForStream {version} ist verfügbar, aber es gibt keinen überprüfbaren Installer. Release auf GitHub öffnen?
+update_skipped|Aggiornamento {version} rimandato.|Update {version} postponed.|Actualización {version} pospuesta.|Mise à jour {version} reportée.|Update {version} zurückgestellt.
+update_fetch|Scaricamento e verifica del setup {version}…|Downloading and verifying setup {version}…|Descargando y verificando el instalador {version}…|Téléchargement et vérification de l’installateur {version}…|Installer {version} wird heruntergeladen und überprüft…
+update_failed|Impossibile scaricare o verificare l’installer. L’app resta alla versione attuale.|The installer could not be downloaded or verified. Your current version is unchanged.|No se pudo descargar o verificar el instalador. La aplicación mantiene la versión actual.|Impossible de télécharger ou de vérifier l’installateur. Votre version actuelle reste inchangée.|Der Installer konnte nicht heruntergeladen oder überprüft werden. Deine aktuelle Version bleibt unverändert.
+update_launch_failed|Il setup è stato verificato, ma non è partito. Puoi avviarlo da questo percorso: {path}|The installer was verified but could not be launched. Open it from this path: {path}|El instalador se verificó, pero no se inició. Puedes abrirlo desde esta ruta: {path}|L’installateur a été vérifié, mais n’a pas démarré. Ouvrez-le depuis ce chemin : {path}|Der Installer wurde überprüft, konnte aber nicht gestartet werden. Öffne ihn über diesen Pfad: {path}
