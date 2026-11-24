@@ -3,6 +3,7 @@
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden}#wrap{position:absolute;left:5%;right:5%;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none} .caption{max-width:95%;text-align:center;border-radius:12px;padding:10px 24px;overflow-wrap:break-word;word-break:normal;box-shadow:0 6px 22px #0005;} .tag{font-weight:800;font-size:.44em;letter-spacing:1px;margin-bottom:4px}.words{font-weight:800;line-height:1.18;white-space:normal}.caption.alert .words{color:#FFE55A!important}.caption.excited .words{color:#80EDB2!important}.caption.sad .words{color:#C4B5FD!important} .animate{animation:pop .22s ease-out}@keyframes pop{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}} .minimal{background:transparent!important;box-shadow:none!important} .neon{outline:2px solid #A78BFA;box-shadow:0 0 24px #A78BFA50}.classic{border-radius:0}.gaming{border-radius:12px}
 </style></head><body><div id="wrap"></div><script>
 const wrap=document.getElementById('wrap');let last='';
+const measure=new URLSearchParams(location.search).get('measure')==='1';
 function validColor(s, fallback){return /^#[0-9a-fA-F]{6}$/.test(s||'')?s:fallback}
 function render(data){
  const st=data.style||{};wrap.style.bottom=Math.max(0,Math.min(700,Number(st.bottom)||100))+'px';
@@ -20,7 +21,22 @@ function render(data){
  const words=document.createElement('div');words.className='words';words.style.color=validColor(st.text_color,'#FFFFFF');words.textContent=c.text||'';
  const outline=Math.max(0,Math.min(6,Number(st.outline)||0));words.style.webkitTextStroke=outline+'px #10141B';words.style.paintOrder='stroke fill';
  div.append(tag,words);wrap.append(div);
+ if(measure&&/^[a-f0-9]{32}$/.test(c.id)){
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{
+     if(div.isConnected)fetch('/render-ack',{method:'POST',body:c.id}).catch(()=>{});
+   }));
+ }
  })
 }
-async function tick(){try{const r=await fetch('/state',{cache:'no-store'});if(r.ok)render(await r.json())}catch(e){}finally{setTimeout(tick,50)}}
+let version='';
+async function tick(){
+ let delay=50;
+ try {
+  const options={cache:'no-store',headers:version?{'If-None-Match':version}:{}};
+  const r=await fetch(version?'/state?wait=1':'/state',options);
+  if(r.ok){render(await r.json());version=r.headers.get('ETag')||'';}
+  else if(r.status!==304){version='';delay=500;}
+ } catch(e){version='';delay=500;}
+ finally{setTimeout(tick,delay);}
+}
 tick();</script></body></html>

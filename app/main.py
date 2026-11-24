@@ -6,6 +6,7 @@ import traceback
 from queue import Queue
 from pathlib import Path
 from threading import Thread
+from time import monotonic
 import httpx
 from PySide6.QtCore import QObject, Signal, QTimer, Qt, QUrl, QLibraryInfo, QTranslator, QProcess
 from PySide6.QtGui import QColor, QDesktopServices, QFont, QPixmap
@@ -15,6 +16,7 @@ from PySide6.QtWidgets import (QApplication,QMainWindow,QWidget,QVBoxLayout,QHBo
 
 from .settings import Settings,ROOT
 from .state import CaptionState
+from .controller import Phase, TranscriptionController
 from .overlay import OverlayServer
 from .audio import CaptureManager,LiveClipQueue,default_microphone_device,microphone_devices
 from .engine import ASRWorker,LLMWorker,nvidia_gpus
@@ -35,9 +37,11 @@ def relaunch_arguments(argv, frozen):
 
 class Signals(QObject):
     log=Signal(str)
+    session_log=Signal(object,str)
     asr_state=Signal(object,str)
     update_result=Signal(object,bool,str)
     update_download=Signal(object,str)
+    obs_result=Signal(str,str)
 
 class Window(QMainWindow):
     def __init__(self):
@@ -52,12 +56,22 @@ class Window(QMainWindow):
         if '--whisper-live' in sys.argv:
             self.settings.data.update(asr_model='medium', processing_mode='whisper', low_latency=True)
         self.state=CaptionState(self.settings)
+        self.controller=TranscriptionController(self.state)
+        self.shutdown_code=None
+        self.shutdown_thread=None
+        self.stop_reported=False
         self.bus=Signals();self.bus.log.connect(self.add_log)
+        self.bus.session_log.connect(self.on_session_log)
         self.bus.asr_state.connect(self.on_asr_state)
         self.bus.update_result.connect(self.on_update_result)
         self.bus.update_download.connect(self.on_update_download)
+        self.bus.obs_result.connect(self.on_obs_result)
+        self.obs_connecting=False
         self.clips=Queue(maxsize=6);self.captures=None;self.asr=None;self.llm=None
         self.running=False;self.server=None
+        self.lifecycle_timer=QTimer(self)
+        self.lifecycle_timer.timeout.connect(self.poll_lifecycle)
+        self.lifecycle_timer.start(50)
         self.capture_ready=False
         self.startup_stage='idle'
         self.wait_message=''
@@ -159,7 +173,6 @@ class Window(QMainWindow):
     def exit_from_tray(self):
         self.exiting=True
         self.close()
-        QApplication.quit()
 
     def refresh_controls(self):
         action=self.t('stop' if self.running else 'start')
@@ -600,8 +613,8 @@ class Window(QMainWindow):
     def exit_for_handoff(self,code):
         self.exiting=True
         QApplication.setQuitOnLastWindowClosed(False)
+        self.shutdown_code=code
         self.close()
-        QApplication.exit(code)
 
     def save_update_repository(self):
         value=self.update_repo_edit.text().strip()
@@ -704,10 +717,18 @@ class Window(QMainWindow):
         self.update_installer=path
         self.exit_for_handoff(UPDATE_EXIT_CODE)
     def install_obs(self):
+        if self.obs_connecting or self.exiting:
+            return
+        self.obs_connecting=True
+        port=self.settings.get('obs_ws_port',4455)
+        password=self.obs_pw.text()
+        url=self.url
+        Thread(target=self.configure_obs,args=(port,password,url),daemon=True,name='obs-configure').start()
+
+    def configure_obs(self,port,password,url):
         try:
             import obsws_python as obs
-            with obs.ReqClient(host='127.0.0.1',port=int(self.settings.get('obs_ws_port',4455)),
-                               password=self.obs_pw.text(),timeout=3) as client:
+            with obs.ReqClient(host='127.0.0.1',port=int(port),password=password,timeout=3) as client:
                 scene=client.get_current_program_scene().current_program_scene_name
                 inputs=client.get_input_list().inputs
                 existing={item['inputName'] for item in inputs if item.get('inputKind')=='browser_source'}
@@ -716,18 +737,28 @@ class Window(QMainWindow):
                     legacy=next((name for name in ('SubtitleForTwitch','StreamCaptions AI') if name in existing),None)
                     if legacy:
                         client.set_input_name(legacy,source)
-                data={'url':self.url,'width':1920,'height':1080,'fps':30,'shutdown':False}
+                data={'url':url,'width':1920,'height':1080,'fps':30,'shutdown':False}
                 try:
                     client.send('CreateInput',{'sceneName':scene,'inputName':source,
                          'inputKind':'browser_source','inputSettings':data,'sceneItemEnabled':True})
-                    QMessageBox.information(self,self.t('obs_connected'),self.t('obs_created',scene=scene))
+                    self.bus.obs_result.emit('obs_created',scene)
                 except Exception as exc:
                     if 'already exists' in str(exc).lower() or 'resource already exists' in str(exc).lower():
                         client.send('SetInputSettings',{'inputName':source,'inputSettings':data,'overlay':True})
-                        QMessageBox.information(self,self.t('obs_connected'),self.t('obs_updated'))
+                        self.bus.obs_result.emit('obs_updated','')
                     else:raise
         except Exception as ex:
-            QMessageBox.warning(self,self.t('obs_failed'),str(ex))
+            message=str(ex).replace(password,'[redacted]') if password else str(ex)
+            self.bus.obs_result.emit('obs_failed',message)
+
+    def on_obs_result(self,result,detail):
+        self.obs_connecting=False
+        if self.exiting:
+            return
+        if result=='obs_failed':
+            QMessageBox.warning(self,self.t(result),detail)
+        else:
+            QMessageBox.information(self,self.t('obs_connected'),self.t(result,scene=detail))
 
     def toggle(self):
         if self.running:
@@ -736,13 +767,14 @@ class Window(QMainWindow):
             self.startup_stage='idle'
             self.wait_message=''
             self.active_backend_text=''
-            self.captures.stop();self.asr.stop();self.llm.stop()
+            self.controller.stop()
+            self.stop_reported=False
             self.refresh_controls();self.add_log(self.t('stopped'));return
         self.start_transcription()
 
     def restart_capture_if_ready(self):
         if self.running and self.capture_ready:
-            self.captures.start()
+            self.controller.start_capture()
 
     def on_asr_state(self,worker,stage):
         if not self.running or worker is not self.asr:
@@ -757,7 +789,7 @@ class Window(QMainWindow):
                 self.active_backend_text=self.t(key,device=name,model=worker.active_model)
             if not self.capture_ready:
                 self.capture_ready=True
-                self.captures.start()
+                self.controller.start_capture()
             self.add_log(self.t('started' if self.captures.workers else 'no_sources'))
         else:
             self.active_backend_text=''
@@ -767,31 +799,69 @@ class Window(QMainWindow):
         self.refresh_controls()
 
     def start_transcription(self):
-        if self.running:
+        if self.exiting:
             return
-        self.clips=LiveClipQueue(maxsize=4) if self.settings.get('low_latency',True) else Queue(maxsize=6)
-        self.llm=LLMWorker(self.settings,self.state,self.bus.log.emit,self.clips)
-        self.asr=ASRWorker(self.settings,self.clips,self.state,self.bus.log.emit,self.llm,self.bus.asr_state.emit)
-        self.captures=CaptureManager(self.settings,self.clips,self.bus.log.emit)
+        self.controller.start(self.make_workers)
+
+    def make_workers(self,captions):
+        self.clips=LiveClipQueue(maxsize=4 if self.settings.get('low_latency',True) else 6)
+        log=lambda message:self.bus.session_log.emit(captions.generation,message)
+        self.llm=LLMWorker(self.settings,captions,log,self.clips)
+        self.asr=ASRWorker(self.settings,self.clips,captions,log,self.llm,self.bus.asr_state.emit)
+        self.llm.asr_busy=self.asr.decoding
+        self.captures=CaptureManager(self.settings,self.clips,log)
         self.running=True
         self.on_asr_state(self.asr,'loading')
-        self.llm.start();self.asr.start()
+        return (self.llm,self.asr),self.captures
+
+    def on_session_log(self,generation,message):
+        if generation==self.controller.active_generation:
+            self.add_log(message)
+
+    def poll_lifecycle(self):
+        previous=self.controller.phase
+        self.controller.poll()
+        if self.controller.phase is Phase.STOPPING:
+            if not self.stop_reported and monotonic()-self.controller.stop_started>=5:
+                self.stop_reported=True
+                self.add_log('Transcription shutdown is waiting for a worker to exit.')
+            return
+        if self.controller.phase is Phase.FAILED and previous is not Phase.FAILED:
+            self.running=False
+            self.capture_ready=False
+            self.startup_stage='idle'
+            self.active_backend_text=''
+            self.refresh_controls()
+            self.add_log('A transcription worker exited unexpectedly.')
+        if self.exiting and self.shutdown_thread is not None and not self.shutdown_thread.is_alive():
+            self.close()
+
     def closeEvent(self,event):
         if self.tray is not None and not self.exiting and self.settings.get('close_to_tray',False):
             self.hide()
             event.ignore()
             return
+        self.exiting=True
+        self.running=False
+        self.controller.stop()
+        if self.shutdown_thread is None:
+            self.shutdown_thread=Thread(target=self.stop_overlay,daemon=True)
+            self.shutdown_thread.start()
+        if self.controller.phase is Phase.STOPPING or self.shutdown_thread.is_alive():
+            event.ignore()
+            return
         if self.tray is not None:
             self.tray.hide()
-        self.running=False
+        self.lifecycle_timer.stop()
         QApplication.removeTranslator(self.qt_translation)
-        try:
-            if self.captures:self.captures.stop()
-            if self.asr:self.asr.stop()
-            if self.llm:self.llm.stop()
-            if self.server:self.server.stop()
-        except Exception:pass
         event.accept()
+        QApplication.exit(self.shutdown_code if self.shutdown_code is not None else 0)
+
+    def stop_overlay(self):
+        try:
+            if self.server:self.server.stop()
+        except Exception as error:
+            self.bus.log.emit(f'Overlay shutdown failed: {error}')
 
 def main():
     if sys.platform=='win32':

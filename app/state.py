@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from threading import RLock
+from threading import Condition, RLock
 import time
 import uuid
 
@@ -8,6 +8,7 @@ class CaptionState:
     def __init__(self,settings):
         self.settings=settings
         self.lock=RLock()
+        self.changed=Condition(self.lock)
         self.entries={}
     def publish(self,source,text,mood='normal'):
         cid=uuid.uuid4().hex
@@ -15,16 +16,20 @@ class CaptionState:
             self.entries[source['id']]={'id':cid,'source':source['id'],'label':source['name'],
                 'color':source.get('color','#FFFFFF'),'text':text,'mood':mood,'updated':time.monotonic(),
                 'expires':time.monotonic()+float(self.settings.get('duration',5.0))}
+            self.changed.notify_all()
         return cid
     def revise(self,source_id,cid,text,mood):
         with self.lock:
             e=self.entries.get(source_id)
             if e and e['id']==cid and e['expires']>time.monotonic():
                 e['text']=text;e['mood']=mood
+                self.changed.notify_all()
                 return True
         return False
     def clear(self):
-        with self.lock:self.entries.clear()
+        with self.lock:
+            self.entries.clear()
+            self.changed.notify_all()
     def snapshot(self):
         now=time.monotonic()
         with self.lock:

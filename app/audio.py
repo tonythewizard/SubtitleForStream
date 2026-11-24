@@ -6,30 +6,77 @@ uses ProcTap's WASAPI PROCESS_LOOPBACK support. No virtual audio driver needed.
 from __future__ import annotations
 from threading import Thread, Event
 from queue import Queue, Empty, Full
-from collections import deque
+from collections import Counter, defaultdict, deque
 import time
 import numpy as np
-from scipy.signal import resample_poly
+from .resampler import StreamingResampler
 
 RATE=16000
 CAPTURE_RATE=48000
 
 
 class LiveClipQueue(Queue):
+    def __init__(self,maxsize):
+        super().__init__(maxsize)
+        self.counters=defaultdict(Counter)
+        self.samples=defaultdict(lambda:deque(maxlen=2048))
+        self.last_source={}
+
+    def metrics(self):
+        with self.mutex:
+            return {source:dict(counts) for source,counts in self.counters.items()}
+
+    def record(self,source,event):
+        with self.mutex:
+            self.counters[source][event]+=1
+
+    def observe(self,source,kind,stage,seconds):
+        with self.mutex:
+            self.samples[source,kind,stage].append(seconds)
+
+    def timings(self):
+        with self.mutex:
+            return {key:tuple(values) for key,values in self.samples.items()}
+
+    def _get(self):
+        partial=all(item[0].get('_partial',False) for item in self.queue)
+        eligible=[i for i,item in enumerate(self.queue) if bool(item[0].get('_partial'))==partial]
+        index=next((i for i in eligible if self.queue[i][0]['id']!=self.last_source.get(partial)),eligible[0])
+        item=self.queue[index]
+        del self.queue[index]
+        self.last_source[partial]=item[0]['id']
+        self.counters[item[0]['id']]['dequeued']+=1
+        return item
+
     def put_clip(self, clip):
         source = clip[0]
+        sid=source['id']
         with self.not_full:
+            self.counters[sid]['received']+=1
             # Drop superseded previews for this source, preserving finalized audio.
             for index in range(len(self.queue)-1, -1, -1):
                 pending = self.queue[index][0]
                 if pending['id']==source['id'] and pending.get('_partial'):
                     del self.queue[index]
                     self.unfinished_tasks -= 1
-            if len(self.queue)>=self.maxsize:
+                    self.counters[sid]['superseded_preview']+=1
+            if self.maxsize>0 and len(self.queue)>=self.maxsize:
                 preview = next((i for i,item in enumerate(self.queue) if item[0].get('_partial')), None)
                 if preview is None and source.get('_partial'):
+                    self.counters[sid]['dropped_overload_preview']+=1
                     return
-                del self.queue[0 if preview is None else preview]
+                if preview is None:
+                    counts=Counter(item[0]['id'] for item in self.queue)
+                    victim=max(counts,key=counts.get)
+                    if sid in counts and counts[sid]>=counts[victim]:
+                        victim=sid
+                    index=next(i for i,item in enumerate(self.queue) if item[0]['id']==victim)
+                else:
+                    index=preview
+                victim=self.queue[index][0]
+                kind='preview' if victim.get('_partial') else 'final'
+                self.counters[victim['id']]['dropped_overload_'+kind]+=1
+                del self.queue[index]
                 self.unfinished_tasks -= 1
             if source.get('_partial'):
                 self.queue.append(clip)
@@ -37,6 +84,7 @@ class LiveClipQueue(Queue):
                 index = next((i for i,item in enumerate(self.queue) if item[0].get('_partial')), len(self.queue))
                 self.queue.insert(index,clip)
             self.unfinished_tasks += 1
+            self.counters[sid]['queued']+=1
             self.not_empty.notify()
 
 
@@ -81,9 +129,12 @@ class SourceCapture(Thread):
 
     def _emit(self,pcm:bytes):
         if not self.stop_event.is_set():
-            try:self.audio_q.put_nowait(pcm)
+            frame=(pcm,time.monotonic())
+            try:self.audio_q.put_nowait(frame)
             except Full:
-                try:self.audio_q.get_nowait();self.audio_q.put_nowait(pcm)
+                if isinstance(self.output_queue,LiveClipQueue):
+                    self.output_queue.record(self.source['id'],'dropped_capture_block')
+                try:self.audio_q.get_nowait();self.audio_q.put_nowait(frame)
                 except (Empty,Full):pass
 
     def run(self):
@@ -139,6 +190,7 @@ class SourceCapture(Thread):
             self.stop_event.wait(2)
 
     def _buffer_loop(self,channels:int,process_pid:int|None=None,capture_rate:int=CAPTURE_RATE):
+        resampler=StreamingResampler(capture_rate,RATE)
         # Lower end-of-speech delay; preserve a short pre-roll so the first phoneme is not lost.
         active=[];total=0;silence=0;last_check=time.monotonic()
         preroll=deque();preroll_samples=0
@@ -149,17 +201,19 @@ class SourceCapture(Thread):
         last_update=0
         window_id=time.monotonic()
         overlap=False
+        speech_start=None
+        speech_end=None
         preroll_size=int(RATE*.14)
         while not self.stop_event.is_set():
             if process_pid and time.monotonic()-last_check>3:
                 last_check=time.monotonic()
                 if get_process_pid(self.source.get('process','Discord.exe'))!=process_pid:break
-            try:pcm=self.audio_q.get(timeout=.2)
+            try:pcm,callback_at=self.audio_q.get(timeout=.2)
             except Empty:continue
             data=np.frombuffer(pcm,dtype=np.float32)
             if not len(data) or len(data)%channels:continue
             if channels>1:data=data.reshape(-1,channels).mean(axis=1)
-            audio=resample_poly(data,RATE,capture_rate).astype(np.float32,copy=False)
+            audio=resampler.push(data)
             if not len(audio):continue
             rms=float(np.sqrt(np.mean(audio*audio)))
             db=20*np.log10(max(rms,1e-7))
@@ -172,10 +226,12 @@ class SourceCapture(Thread):
                     while preroll and preroll_samples-len(preroll[0])>=preroll_size:
                         preroll_samples-=len(preroll.popleft())
                     continue
+                speech_start=callback_at-len(audio)/RATE
                 if preroll:
                     active=list(preroll);total=sum(len(x) for x in active)
                     preroll.clear();preroll_samples=0
             active.append(audio.copy());total+=len(audio)
+            if voiced:speech_end=callback_at
             silence=0 if voiced else silence+len(audio)
             final = silence>=RATE*end_silence_ms/1000 or total>=RATE*max_seconds
             partial = self.low_latency and voiced and total-last_update>=update_samples
@@ -186,7 +242,8 @@ class SourceCapture(Thread):
                     clip=clip[:max(1,len(clip)-silence+int(RATE*tail_seconds))]
                 if len(clip)>=RATE*min_clip_ms/1000:
                     # Capture timestamp lets ASR drop stale subtitles instead of lagging.
-                    source=dict(self.source,_window=window_id,_partial=not final,_overlap=overlap)
+                    source=dict(self.source,_window=window_id,_partial=not final,_overlap=overlap,
+                                _audio_start=speech_start,_audio_end=speech_end)
                     item=(source,clip,time.monotonic())
                     try:
                         if isinstance(self.output_queue,LiveClipQueue):
@@ -209,11 +266,13 @@ class SourceCapture(Thread):
                         context=clip[-int(RATE*.35):].copy()
                         active=[context]
                         total=last_update=len(context)
+                        speech_start=callback_at-len(context)/RATE
 
 class CaptureManager:
     def __init__(self,settings,clip_queue,error_callback):
         self.settings=settings;self.clip_queue=clip_queue;self.error_callback=error_callback
         self.workers=[];self.stop_event=None
+        self.restart_pending=False
 
     def input_level(self):
         cutoff=time.monotonic()-.25
@@ -222,13 +281,22 @@ class CaptureManager:
 
     def start(self):
         self.stop()
+        self.restart_pending=True
+        self.poll()
+
+    def is_alive(self):
+        return any(worker.is_alive() for worker in self.workers)
+
+    def poll(self):
+        if not self.restart_pending or self.is_alive():
+            return
+        self.restart_pending=False
+        self.workers=[]
         self.stop_event=Event()
         for src in self.settings.get('sources',[]):
             if src.get('enabled'):
                 w=SourceCapture(src,self.clip_queue,self.stop_event,self.error_callback,self.settings.get('silence_db',-34),self.settings.get('low_latency',True))
                 self.workers.append(w);w.start()
     def stop(self):
+        self.restart_pending=False
         if self.stop_event:self.stop_event.set()
-        # Do not block the GUI for long; workers are daemon threads.
-        for w in self.workers:w.join(timeout=.6)
-        self.workers=[];self.stop_event=None

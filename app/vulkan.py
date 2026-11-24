@@ -111,7 +111,11 @@ class VulkanWhisper:
         try:
             if self.process is not None and self.process.poll() is None:
                 self.process.terminate()
-                self.process.wait(timeout=5)
+                try:
+                    self.process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    self.process.kill()
+                    self.process.wait(timeout=5)
         finally:
             self.client.close()
             self.log.close()
